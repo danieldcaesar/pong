@@ -52,7 +52,7 @@ function drawCircle(x, y, r, colour){
 function drawText(text, x, y, colour){
     // draws text at a position(x,y) with a colour
     context.fillStyle = colour;
-    context.font = "45px blippo";
+    context.font = "45px monospace";
     context.fillText(text, x, y);
 }
 function drawNet(){
