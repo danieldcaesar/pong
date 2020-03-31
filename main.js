@@ -67,9 +67,11 @@ function resetBall() {
     ball.velX = -ball.velX;
     ball.velY = 0;
 }
+
 // controlling user paddle
-// canvas.addEventListener("devicemotion", movePaddle);
-canvas.addEventListener("mousemove", movePaddle);
+sensor = new Gyroscope({frequency: fps});
+canvas.addEventListener("devicemotion", movePaddle);
+// canvas.addEventListener("mousemove", movePaddle);
 function movePaddle(event) {
     let rect = canvas.getBoundingClientRect();
     usr.y = event.clientY - rect.top - usr.height/2;
