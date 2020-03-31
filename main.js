@@ -24,8 +24,8 @@ const ball = {
     y: canvas.height/2,
     radius: 10,
     speed: 5,
-    velX: 5,
-    velY: 5,
+    velX: -5,
+    velY: 0,
     colour: "white"
 }
 const net = {
@@ -60,6 +60,20 @@ function drawNet(){
         drawRect(net.x, net.y + i, net.width, net.height, net.colour);     
     }
 }
+function collision(b, p){
+    b.top = b.y-b.radius;
+    b.bottom = b.y+b.radius;
+    b.left = b.x-b.radius;
+    b.right = b.x+b.radius;
+
+    p.top = p.y;
+    p.bottom = p.y+p.height;
+    p.left = p.x;
+    p.right = p.x+p.width;
+
+    if(b.right>p.left && b.bottom>p.top && b.left<p.right && b.top<p.bottom)
+        return true;
+}
 function render() {
     // initializes game
     drawRect(0, 0, canvas.width, canvas.height, "black");
@@ -69,10 +83,29 @@ function render() {
     
     drawRect(com.x, com.y, com.width, com.height, com.colour);
     drawRect(usr.x, usr.y, usr.width, usr.height, usr.colour);
+    
     drawCircle(ball.x, ball.y, ball.radius, ball.colour);
+}
+function update() {
+      ball.x += ball.velX;
+      ball.y += ball.velY;
+
+      // control the com paddle
+      let computerLevel = 0.1;
+      com.y += (ball.y - (com.y + com.height/2)) * computerLevel;
+      if(ball.y+ball.radius > canvas.height || ball.y-ball.radius < 0){
+          ball.velY = -ball.velY;
+      }
+
+      let player = (ball.x<canvas.width/2) ? com : usr;
+      if(collision(ball, player)){
+          ball.velX = -ball.velX;
+      }
+      
 }
 function game(){
     render();
+    update();
 }
 
 
