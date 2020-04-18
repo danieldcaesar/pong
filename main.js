@@ -117,7 +117,7 @@ function update() {
     ball.y += ball.velY;
 
       // control the com paddle
-      com.y += (ball.y - (com.y + com.height/2)) * 0.1;
+      com.y += (ball.y - (com.y + com.height/2)) * 0.05;
 
       if(ball.y+ball.radius > canvas.height || ball.y-ball.radius < 0){
           ball.velY = -ball.velY;
