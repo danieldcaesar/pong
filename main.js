@@ -3,19 +3,19 @@ const context = canvas.getContext("2d");
 const fps = 50;
 const com = {
     // computer paddle
-    x: 0,
-    y: canvas.height/2 - 50,
-    width: 10,
-    height: 100,
+    x: canvas.width/2 - 50,
+    y: 0,
+    width: 100,
+    height: 10,
     colour: "white",
     score: 0
 }
 const usr = {
     // user paddle
-    x: canvas.width-10,
-    y: canvas.height/2 - 50,
-    width: 10,
-    height: 100,
+    x: canvas.width/2 - 50,
+    y: canvas.height-10,
+    width: 100,
+    height: 10,
     colour: "white",
     score: 0
 }
@@ -24,15 +24,15 @@ const ball = {
     y: canvas.height/2,
     radius: 10,
     speed: 6,
-    velX: 5,
-    velY: 0,
+    velX: 0,
+    velY: -1,
     colour: "white"
 }
 const net = {
-    x: canvas.width/2,
-    y: 0,
-    width: 2,
-    height: 10,
+    x: 0,
+    y: canvas.height/2,
+    width: 10,
+    height: 2,
     colour: "white"
 }
 
@@ -56,23 +56,22 @@ function drawText(text, x, y, colour){
     context.fillText(text, x, y);
 }
 function drawNet(){
-    for (let i = 0; i <= canvas.height; i+=15) {
-        drawRect(net.x, net.y + i, net.width, net.height, net.colour);     
+    for (let i = 0; i <= canvas.width; i+=15) {
+        drawRect(net.x + i, net.y, net.width, net.height, net.colour);     
     }
 }
 function resetBall() {
     ball.x = canvas.width/2;
     ball.y = canvas.height/2;
-    ball.speed = 6;
-    ball.velX = -ball.velX;
-    ball.velY = 0;
+    ball.speed = 7;
+    ball.velX = 0;
+    ball.velY = -ball.velY;
 }
 // controlling user paddle
-// canvas.addEventListener("devicemotion", movePaddle);
 canvas.addEventListener("mousemove", movePaddle);
 function movePaddle(event) {
     let rect = canvas.getBoundingClientRect();
-    usr.y = event.clientY - rect.top - usr.height/2;
+    usr.x = event.clientX - rect.left - usr.width/2;
 }
 
 function collision(b, p){
@@ -93,10 +92,10 @@ function render() {
     // initializes game
     drawRect(0, 0, canvas.width, canvas.height, "black");
     drawNet();
-    drawText("COM", canvas.width/4, canvas.height/8, "white");
-    drawText("YOU", 3*canvas.width/4, canvas.height/8, "white");
-    drawText(com.score, canvas.width/4, 2*canvas.height/8, "white");
-    drawText(usr.score, 3*canvas.width/4, 2*canvas.height/8, "white");
+    drawText("COM", canvas.width/10, canvas.height/8, "white");
+    drawText("YOU", canvas.width/10, canvas.height/2 + 50, "white");
+    drawText(com.score, canvas.width/10, 2*canvas.height/8, "white");
+    drawText(usr.score, canvas.width/10, canvas.height/2 + 100, "white");
     
     drawRect(com.x, com.y, com.width, com.height, com.colour);
     drawRect(usr.x, usr.y, usr.width, usr.height, usr.colour);
@@ -105,10 +104,10 @@ function render() {
 }
 function update() {
     // updates the score
-    if(ball.x-ball.radius < 0){
+    if(ball.y-ball.radius < 0){
         usr.score++;
         resetBall();
-    }else if(ball.x+ball.radius > canvas.width){
+    }else if(ball.y+ball.radius > canvas.height){
         com.score++;
         resetBall();
     }
@@ -117,26 +116,27 @@ function update() {
     ball.y += ball.velY;
 
       // control the com paddle
-      com.y += (ball.y - (com.y + com.height/2)) * 0.05;
+      let compLevel = 0.065;
+      com.x += (ball.x - (com.x + com.width/2)) * compLevel;
 
-      if(ball.y+ball.radius > canvas.height || ball.y-ball.radius < 0){
-          ball.velY = -ball.velY;
+      if(ball.x+ball.radius > canvas.width || ball.x-ball.radius < 0){
+          ball.velX = -ball.velX;
       }
  
       // check if ball hit user or com paddle
-      let player = (ball.x<canvas.width/2) ? com : usr;
+      let player = (ball.y<canvas.height/2) ? com : usr;
 
 
       if(collision(ball, player)){
         //   specifics for returning ball after paddle hit
-          let collidePoint = ball.y - (player.y + player.height/2);
-          collidePoint /= (player.height/2);
-          let angleRad = collidePoint * (Math.PI/4);
-          let direction = (ball.x+ball.radius < canvas.width/2) ? 1 : -1;
-          ball.velX = direction * ball.speed * Math.cos(angleRad);
-          ball.velY = ball.speed * Math.sin(angleRad);
-
-          ball.speed += 0.1;
+        let collidePoint = ball.x - (player.x + player.width/2);
+        collidePoint /= (player.width/2);
+        let angleRad = collidePoint * (Math.PI/4);
+        let direction = (ball.y+ball.radius < canvas.height/2) ? 1 : -1;
+        ball.velX = ball.speed * Math.sin(angleRad);
+        ball.velY = direction * ball.speed * Math.cos(angleRad);
+        
+        ball.speed += 0.1;
       }
   
 }
