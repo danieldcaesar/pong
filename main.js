@@ -71,7 +71,7 @@ function resetBall() {
 canvas.addEventListener("mousemove", movePaddle);
 function movePaddle(event) {
     let rect = canvas.getBoundingClientRect();
-    usr.x = event.clientX - rect.left - usr.width/2;
+    usr.x = event.clientX;
 }
 
 function collision(b, p){
