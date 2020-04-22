@@ -67,11 +67,21 @@ function resetBall() {
     ball.velX = 0;
     ball.velY = -ball.velY;
 }
-// controlling user paddle
-canvas.addEventListener("mousemove", movePaddle);
-function movePaddle(event) {
-    let rect = canvas.getBoundingClientRect();
-    usr.x = event.clientX;
+// // controlling user paddle with mouse
+// canvas.addEventListener("mousemove", movePaddle);
+// function movePaddle(event) {
+//     let rect = canvas.getBoundingClientRect();
+//     usr.x = event.clientX - (usr.width/2);
+// }
+
+if(window.DeviceOrientationEvent){
+    window.addEventListener("deviceorientation", function(evt){
+        const tilt = (usr.width/2) + this.event.alpha;
+        if(tilt < 20 && tilt > 80) return;
+        usr.x = tilt;
+
+        this.console.log(usr.x);
+    })
 }
 
 function collision(b, p){
