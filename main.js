@@ -74,15 +74,19 @@ function resetBall() {
 //     usr.x = event.clientX - (usr.width/2);
 // }
 
-if(window.DeviceOrientationEvent){
-    window.addEventListener("deviceorientation", function(evt){
-        const tilt = (usr.width/2) + this.event.alpha;
-        if(tilt < 20 && tilt > 80) return;
-        usr.x = tilt;
+function movePaddle(event) {
+    const tilt = Math.round(event.alpha);
+    console.log(tilt);
+    if(tilt>=-30 && tilt<=24)
+        usr.x = (tilt - (-30)) * (canvas.width-50) / (30- (-30));
 
-        this.console.log(usr.x);
-    })
+    else return;
 }
+
+if(window.DeviceOrientationEvent){
+    window.addEventListener("deviceorientation", movePaddle);
+}
+else alert("Not supported on device.");
 
 function collision(b, p){
     b.top = b.y-b.radius;
