@@ -84,7 +84,7 @@ function movePaddle(event) {
 }
 
 if(window.DeviceOrientationEvent){
-    window.addEventListener("deviceorientation", movePaddle);
+    
 }
 else alert("Not supported on device.");
 
@@ -117,6 +117,8 @@ function render() {
     drawCircle(ball.x, ball.y, ball.radius, ball.colour);
 }
 function update() {
+    window.addEventListener("deviceorientation", movePaddle);
+
     // updates the score
     if(ball.y-ball.radius < 0){
         usr.score++;
