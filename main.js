@@ -76,15 +76,14 @@ function resetBall() {
 
 function movePaddle(event) {
     const tilt = Math.round(event.alpha);
-    console.log(tilt);
-    if(tilt>=-30 && tilt<=24)
-        usr.x = (tilt - (-30)) * (canvas.width-50) / (30- (-30));
-
-    else return;
+    // if(tilt>=-30 && tilt<=24)
+    //     usr.x = (tilt - (-30)) * (canvas.width-50) / (30- (-30));
+    usr.x = tilt;
+    // else return;
 }
 
 if(window.DeviceOrientationEvent){
-    
+    window.addEventListener("deviceorientation", movePaddle, false);
 }
 else alert("Not supported on device.");
 
@@ -117,7 +116,7 @@ function render() {
     drawCircle(ball.x, ball.y, ball.radius, ball.colour);
 }
 function update() {
-    window.addEventListener("deviceorientation", movePaddle);
+    
 
     // updates the score
     if(ball.y-ball.radius < 0){
