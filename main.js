@@ -75,17 +75,11 @@ function resetBall() {
 // }
 
 function movePaddle(event) {
-    const tilt = Math.round(event.alpha);
-    if(tilt>=-30 && tilt<=30){
-        usr.x = ((tilt - (-30)) * (canvas.width-50) / (30- (-30))) -25;
-        // usr.x = (canvas.width/2 - 50) + pos;
-        console.log(tilt);
-    }
-        
-
+    let rect = canvas.getBoundingClientRect();
+    usr.x = evt.clientX - rect.left - usr.width/2;
 }
 
-window.addEventListener("deviceorientation", movePaddle, false);
+window.addEventListener("mousemove", movePaddle, false);
 
 function collision(b, p){
     b.top = b.y-b.radius;
